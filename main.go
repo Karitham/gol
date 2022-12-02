@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"os"
+	"strings"
+	"text/template"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -16,6 +18,11 @@ type server struct {
 	store *Store
 }
 
+type Template struct {
+	Path  string
+	Query string
+}
+
 func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 	key := chi.URLParam(r, "key")
 	outURL, err := s.store.Get(user, key)
@@ -24,7 +31,37 @@ func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, outURL, http.StatusFound)
+	hasQueryVar := strings.Contains(outURL, ".Query")
+	hasPathVar := strings.Contains(outURL, ".Path")
+
+	if !hasQueryVar && !hasPathVar {
+		http.Redirect(w, r, outURL, http.StatusFound)
+	}
+
+	tmpl, err := template.New("url").Parse(outURL)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	path := chi.URLParam(r, "*")
+	path, _, _ = strings.Cut(path, "?")
+	query := r.URL.RawQuery
+
+	if !hasPathVar {
+		query = path
+	}
+
+	var buf strings.Builder
+	if err := tmpl.Execute(&buf, Template{
+		Path:  path,
+		Query: query,
+	}); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, buf.String(), http.StatusFound)
 }
 
 func (s *server) set(w http.ResponseWriter, r *http.Request) {
@@ -90,6 +127,7 @@ func main() {
 	r.Get("/", s.index)
 	r.Post("/", s.set)
 	r.Get("/{key}", s.redirect)
+	r.Get("/{key}/*", s.redirect)
 	r.Delete("/{key}", s.delete)
 
 	port := "8080"
