@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Link</title>
+</head>
+
+
+
+<body>
+    <div class="wrapper">
+        <h1>Go Links</h1>
+
+        <div class="add-link">
+            <form action="/" method="post">
+                <div>
+                    <input type="text" name="key" placeholder="Name">
+                </div>
+                <div>
+                    <input type="text" name="url" placeholder="Link">
+                </div>
+                <div id="add-link-submit">
+                    <input type="submit" value="Add">
+                </div>
+            </form>
+        </div>
+
+        {{ if . }}
+        <h2>Existing links</h2>
+        <div class="list">
+            <ul>
+                {{range $key, $value := .}}
+                <li>
+                    <span class="list-key">/{{$key}}</span> => <a href="{{ $key }}" target="_blank">{{ $value }}</a>
+                </li>
+                {{end}}
+            </ul>
+        </div>
+        {{end}}
+    </div>
+</body>
+
+<style>
+    :root {
+        --primary-bg: #1e1e1e;
+        --secondary-bg: #2e2e2e;
+        --primary-text: #eeeeee;
+        --accent: rgb(255, 192, 18);
+    }
+
+    body {
+        background-color: var(--primary-bg);
+        color: var(--primary-text);
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 1440px;
+        margin: 0 auto;
+        font-size: 16px;
+    }
+
+    .wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .list {
+        display: flex;
+        justify-content: center;
+    }
+
+    .list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .list ul li {
+        margin: 10px;
+        font-size: 20px;
+    }
+
+    .list ul li a {
+        color: var(--primary-text);
+        text-decoration: none;
+    }
+
+    .list .list-key {
+        color: var(--accent);
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+    .add-link {
+        margin: 20px;
+    }
+
+    form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        grid-gap: 10px;
+    }
+
+    form div {
+        margin: 10px;
+    }
+
+    form input {
+        margin: 16px;
+        padding: 24px;
+        background-color: var(--secondary-bg);
+        border: none;
+        color: var(--primary-text);
+    }
+
+    #add-link-submit {
+        grid-column: span 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    form input[type="submit"] {
+        background-color: var(--accent);
+        color: black;
+        font-weight: 500;
+        border: none;
+        width: 100%;
+        border-radius: 4px;
+    }
+</style>
+
+</html>

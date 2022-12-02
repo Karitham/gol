@@ -1,0 +1,41 @@
+# docker run -v /persistant/data:/root ghcr.io/tailscale/golink:main
+version: "3.9"
+name: golink
+
+x-kraud-ui:
+  label: "GOL \u2013 Go://link service"
+  description: |
+    gol is a private shortlink service for your usernet. It lets you create short, memorable links for the websites you and your team use most.
+
+  post_launch: | 
+    [Check out the source repo to learn more](https://github.com/karitham/gol).
+
+  logo_url: "https://cdn2.iconfinder.com/data/icons/game-essential-soft-style/512/link-256.png"
+  ext_url: "https://github.com/karitham/gol"
+  config:
+    INGRESS:
+      kind: "ingress"
+      label: "http endpoint"
+      description: "http endpoint of gol"
+      protocol: "https"
+      default: "go.*"
+      required: true
+
+services:
+  golink:
+    container_name: golink
+    image: ghcr.io/karitham/gol:main
+    labels:
+      - kr.ingress.8080=${INGRESS:-https://go.*}
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: '8080'
+    volumes:
+      - golink-data:/data
+
+volumes:
+  golink-data:
+    name: golink-data
+    driver: "local"
+
