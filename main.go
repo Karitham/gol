@@ -25,6 +25,8 @@ type Template struct {
 
 func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 	key := chi.URLParam(r, "key")
+	key, args, _ := strings.Cut(key, " ")
+
 	outURL, err := s.store.Get(user, key)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -36,6 +38,7 @@ func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 
 	if !hasQueryVar && !hasPathVar {
 		http.Redirect(w, r, outURL, http.StatusFound)
+		return
 	}
 
 	tmpl, err := template.New("url").Parse(outURL)
@@ -45,6 +48,10 @@ func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 	}
 
 	path := chi.URLParam(r, "*")
+	if args != "" {
+		path = args + "/" + path
+	}
+
 	path, _, _ = strings.Cut(path, "?")
 	query := r.URL.RawQuery
 
@@ -61,7 +68,7 @@ func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, buf.String(), http.StatusFound)
+	http.Redirect(w, r, buf.String(), http.StatusTemporaryRedirect)
 }
 
 func (s *server) set(w http.ResponseWriter, r *http.Request) {
