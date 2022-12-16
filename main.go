@@ -48,7 +48,7 @@ func (s *server) redirect(w http.ResponseWriter, r *http.Request) {
 	}
 
 	path := chi.URLParam(r, "*")
-	if args != "" {
+	if args != "" && path != "" {
 		path = args + "/" + path
 	}
 
