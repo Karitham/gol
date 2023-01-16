@@ -24,8 +24,8 @@
         <div class="wrapper">
             <h1 class="mv-38">Go://Links</h1>
 
-            <div class="m-20">
-                <form action="/" method="post">
+            <div id="add-link">
+                <form class="m-20" action="/" method="post">
                     <input type="text" name="key" placeholder="Name">
                     <input type="text" name="url" placeholder="Link">
                     <button id="add-link-submit" type="submit" value="Add">
@@ -45,8 +45,8 @@
 
                 <div class="m-20">
                     <div class="link-table">
-                        <h5>Key</h5>
-                        <h5>Link</h5>
+                        <span>Key</span>
+                        <span>Link</span>
                     </div>
                     <ul>
                         {{range $key, $value := .}}
@@ -84,11 +84,20 @@
 
 <style>
     :root {
+        --root-bg: #181818;
         --primary-bg: #1e1e1e;
         --secondary-bg: #2e2e2e;
         --primary-text: #eeeeee;
+        --secondary-text: #cccccc;
         --accent: #ffc012;
         --accent-tint: #ffcd3c;
+    }
+
+    #existing-links,
+    #add-link {
+        background-color: var(--primary-bg);
+        border-radius: 18px;
+        padding: 1rem;
     }
 
     .link-table {
@@ -106,17 +115,17 @@
     }
 
     body {
-        background-color: var(--primary-bg);
+        padding: 0;
+        margin: 0;
+        background-color: var(--root-bg);
+    }
+
+    #container {
         color: var(--primary-text);
         font-family: Arial, Helvetica, sans-serif;
         max-width: 1440px;
         margin: 0 auto;
-        padding: 0;
         font-size: 1.4rem;
-    }
-
-    #container {
-        padding: 24px;
     }
 
     .delete-button {
