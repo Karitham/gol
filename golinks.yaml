@@ -18,7 +18,7 @@ x-kraud-ui:
       label: "http endpoint"
       description: "http endpoint of gol"
       protocol: "https"
-      default: "go.*"
+      default: "users@go.*"
       required: true
 
 services:
@@ -26,7 +26,7 @@ services:
     container_name: golink
     image: ghcr.io/karitham/gol:main
     labels:
-      - kr.ingress.8080=${INGRESS:-https://go.*}
+      - kr.ingress.8080=${INGRESS:-https://users@go.*}
     ports:
       - "8080:8080"
     environment:

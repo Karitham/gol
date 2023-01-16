@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"text/template"
@@ -91,7 +92,7 @@ func (s *server) set(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) delete(w http.ResponseWriter, r *http.Request) {
-	key := chi.URLParam(r, "key")
+	key := r.URL.Query().Get("key")
 
 	if err := s.store.Delete(user, key); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -132,10 +133,15 @@ func main() {
 	r.Use(logger)
 
 	r.Get("/", s.index)
+	r.Get("/static/*", func(w http.ResponseWriter, r *http.Request) {
+		r.URL.Path, _ = url.JoinPath("/front", r.URL.Path)
+		http.FileServer(http.FS(frontFS)).ServeHTTP(w, r)
+	})
+
 	r.Post("/", s.set)
 	r.Get("/{key}", s.redirect)
 	r.Get("/{key}/*", s.redirect)
-	r.Delete("/{key}", s.delete)
+	r.Delete("/", s.delete)
 
 	port := "8080"
 	if p := os.Getenv("PORT"); p != "" {

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon.svg" type="image/svg" />
+    <title>Go Link</title>
+</head>
+
+<script>
+    function deleteLink(key) {
+        fetch('?key=' + encodeURIComponent(key), {
+            method: 'DELETE'
+        }).then(() => {
+            location.reload();
+        })
+    }
+</script>
+
+<body>
+    <div id="container">
+        <div class="wrapper">
+            <h1 class="mv-38">Go://Links</h1>
+
+            <div class="m-20">
+                <form action="/" method="post">
+                    <input type="text" name="key" placeholder="Name">
+                    <input type="text" name="url" placeholder="Link">
+                    <button id="add-link-submit" type="submit" value="Add">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="logo primary" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="16" />
+                            <line x1="8" y1="12" x2="16" y2="12" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            {{ if . }}
+            <div id="existing-links">
+
+                <div class="m-20">
+                    <div class="link-table">
+                        <h5>Key</h5>
+                        <h5>Link</h5>
+                    </div>
+                    <ul>
+                        {{range $key, $value := .}}
+                        <li class="link-table row-sep">
+                            <span class="list-key">/{{$key}}</span>
+                            <span>
+                                <a href="{{ $key }}" target="_blank">
+                                    {{ $value }}
+                                </a>
+
+
+                                <button class="delete-button" onclick="deleteLink('{{$key}}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="logo" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        </path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                </button>
+                            </span>
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{end}}
+    </div>
+    </div>
+</body>
+
+<style>
+    :root {
+        --primary-bg: #1e1e1e;
+        --secondary-bg: #2e2e2e;
+        --primary-text: #eeeeee;
+        --accent: #ffc012;
+        --accent-tint: #ffcd3c;
+    }
+
+    .link-table {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem;
+        width: 100%;
+        align-content: center;
+    }
+
+    .row-sep {
+        border-bottom: 1px solid var(--secondary-bg);
+    }
+
+    body {
+        background-color: var(--primary-bg);
+        color: var(--primary-text);
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0;
+        font-size: 1.4rem;
+    }
+
+    #container {
+        padding: 24px;
+    }
+
+    .delete-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        width: min-content;
+    }
+
+    .logo {
+        stroke: var(--primary-text);
+    }
+
+    .logo.primary {
+        stroke: var(--primary-bg);
+    }
+
+    .wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 24px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+
+    li a {
+        color: var(--primary-text);
+        text-decoration: none;
+    }
+
+    .list-key {
+        color: var(--accent);
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+    .m-20 {
+        margin: 20px;
+    }
+
+    .mv-38 {
+        margin-top: 38px;
+        margin-bottom: 38px;
+    }
+
+    form {
+        display: flex;
+        gap: 2rem;
+        flex-direction: row;
+    }
+
+    form input {
+        background-color: var(--secondary-bg);
+        width: 100%;
+        border: none;
+        padding: 1rem;
+        color: var(--primary-text);
+        font-size: 1.2rem;
+    }
+
+    #add-link-submit {
+        background-color: var(--accent);
+        border: none;
+        cursor: pointer;
+        padding: 0 24px;
+        border-radius: 4px;
+        width: min-content;
+    }
+
+    form input[type="submit"] {
+        background-color: var(--accent);
+        color: black;
+        font-weight: 500;
+        border: none;
+        border-radius: 4px;
+    }
+
+    form input:focus {
+        outline: none;
+    }
+
+    form input[type="submit"]:hover {
+        background-color: var(--accent-tint);
+    }
+</style>
+
+</html>
