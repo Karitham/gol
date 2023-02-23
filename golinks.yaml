@@ -38,4 +38,6 @@ volumes:
   golink-data:
     name: golink-data
     driver: "local"
+    driver_opts:
+      - size=1GB
 

@@ -22,59 +22,54 @@
 <body>
     <div id="container">
         <div class="wrapper">
-            <h1 class="mv-38">Go://Links</h1>
+            <h1>Go://Links</h1>
 
-            <div id="add-link">
-                <form class="m-20" action="/" method="post">
-                    <input type="text" name="key" placeholder="Name">
-                    <input type="text" name="url" placeholder="Link">
-                    <button id="add-link-submit" type="submit" value="Add">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="logo primary" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" y1="8" x2="12" y2="16" />
-                            <line x1="8" y1="12" x2="16" y2="12" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
+            <form id="add-link" action="/" method="post">
+                <input type="text" name="key" required placeholder="Name">
+                <input type="text" name="url" required placeholder="Link">
+                <button id="add-link-submit" type="submit" value="Add">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="logo primary" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="feather feather-plus-circle">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="16" />
+                        <line x1="8" y1="12" x2="16" y2="12" />
+                    </svg>
+                </button>
+            </form>
 
             {{ if . }}
             <div id="existing-links">
 
-                <div class="m-20">
-                    <div class="link-table">
-                        <span>Key</span>
-                        <span>Link</span>
-                    </div>
-                    <ul>
-                        {{range $key, $value := .}}
-                        <li class="link-table row-sep">
-                            <span class="list-key">/{{$key}}</span>
-                            <span>
-                                <a href="{{ $key }}" target="_blank">
-                                    {{ $value }}
-                                </a>
-
-
-                                <button class="delete-button" onclick="deleteLink('{{$key}}')">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="logo" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path
-                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
-                                        </path>
-                                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                                    </svg>
-                                </button>
-                            </span>
-                        </li>
-                        {{end}}
-                    </ul>
-                </div>
+                <table>
+                    <tr>
+                        <td>Shortcut</hr>
+                        <td>Link</td>
+                        <td></td>
+                    </tr>
+                    {{range $key, $value := .}}
+                    <tr>
+                        <td><a href="{{ $key }}" target="_blank">{{$key}}</a></td>
+                        <td>
+                            {{ $value }}
+                        </td>
+                        <td class="row-options">
+                            <button class="delete-button" onclick="deleteLink('{{$key}}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="logo" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path
+                                        d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                    </path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    {{end}}
+                </table>
             </div>
         </div>
         {{end}}
@@ -97,7 +92,11 @@
     #add-link {
         background-color: var(--primary-bg);
         border-radius: 18px;
-        padding: 1rem;
+        padding: 2rem;
+    }
+
+    .row-options {
+        text-align: right;
     }
 
     .link-table {
@@ -108,10 +107,6 @@
         padding: 0.5rem;
         width: 100%;
         align-content: center;
-    }
-
-    .row-sep {
-        border-bottom: 1px solid var(--secondary-bg);
     }
 
     body {
@@ -125,7 +120,7 @@
         font-family: Arial, Helvetica, sans-serif;
         max-width: 1440px;
         margin: 0 auto;
-        font-size: 1.4rem;
+        padding: 2rem;
     }
 
     .delete-button {
@@ -158,24 +153,9 @@
     }
 
 
-    li a {
-        color: var(--primary-text);
-        text-decoration: none;
-    }
-
-    .list-key {
+    tr a {
         color: var(--accent);
-        padding: 8px;
-        border-radius: 5px;
-    }
-
-    .m-20 {
-        margin: 20px;
-    }
-
-    .mv-38 {
-        margin-top: 38px;
-        margin-bottom: 38px;
+        text-decoration: none;
     }
 
     form {
@@ -185,21 +165,25 @@
     }
 
     form input {
+        flex: 1;
         background-color: var(--secondary-bg);
-        width: 100%;
         border: none;
         padding: 1rem;
         color: var(--primary-text);
-        font-size: 1.2rem;
+        font-size: 16px;
+    }
+
+    table {
+        width: 100%;
     }
 
     #add-link-submit {
         background-color: var(--accent);
         border: none;
         cursor: pointer;
-        padding: 0 24px;
         border-radius: 4px;
-        width: min-content;
+        height: 48px;
+        min-width: 48px;
     }
 
     form input[type="submit"] {
@@ -208,6 +192,7 @@
         font-weight: 500;
         border: none;
         border-radius: 4px;
+        width: fit-content;
     }
 
     form input:focus {
@@ -216,6 +201,31 @@
 
     form input[type="submit"]:hover {
         background-color: var(--accent-tint);
+    }
+
+    @media (max-width: 768px) {
+        #add-link {
+            flex: 1;
+            flex-direction: column;
+        }
+
+        table {
+            width: 100%;
+
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* top right of the cell */
+        .row-options {
+            position: relative;
+            top: -80px;
+            right: 20px;
+        }
     }
 </style>
 
